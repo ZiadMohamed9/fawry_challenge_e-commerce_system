@@ -7,7 +7,19 @@ import service.CheckoutService;
 
 import java.time.LocalDate;
 
+/**
+ * Main class to run the e-commerce application tests.
+ * This class contains methods to test customer creation, product creation,
+ * cart operations, and the checkout process.
+ */
 public class Main {
+    /**
+     * Main method to run the tests.
+     * It creates a customer, performs various cart operations,
+     * and tests the checkout process.
+     *
+     * @param args command line arguments (not used)
+     */
     public static void main(String[] args) {
         // Test customer creation with various scenarios
         createCustomerTest();
@@ -37,6 +49,13 @@ public class Main {
 
     }
 
+    /**
+     * Tests a successful checkout process for a customer.
+     * It creates products, adds them to the cart, sets a sufficient balance,
+     * and performs the checkout operation.
+     *
+     * @param alice the customer to perform the checkout
+     */
     private static void successfulCheckoutTest(Customer alice) {
         // Create some products
         Product cheese = new ExpirableShippableProduct("Cheese", 5.0, 10, LocalDate.of(2025, 12, 31), 1.0);
@@ -78,6 +97,13 @@ public class Main {
         System.out.println("Scratch Card quantity after checkout: " + scratchCard.getQuantity());
     }
 
+    /**
+     * Tests the checkout process with various scenarios including errors.
+     * It checks for null customers, empty carts, insufficient quantities,
+     * out-of-stock products, expired products, and insufficient balance.
+     *
+     * @param alice the customer to perform the checkout
+     */
     private static void checkoutTest(Customer alice) {
         // Check out null customer
         try {
@@ -154,6 +180,12 @@ public class Main {
         System.out.println("___________________________________");
     }
 
+    /**
+     * Tests various cart operations including adding, removing, and updating products.
+     * It checks for null products, invalid quantities, and other edge cases.
+     *
+     * @param aliceCart the cart to perform operations on
+     */
     private static void updateCartTest(Cart aliceCart) {
         // Attempt to update a null product
         try {
@@ -204,6 +236,13 @@ public class Main {
         }
     }
 
+    /**
+     * Tests the removal of products from the cart.
+     * It checks for null products, products not in the cart,
+     * and valid removal operations.
+     *
+     * @param aliceCart the cart to perform removal operations on
+     */
     private static void removeFromCartTest(Cart aliceCart) {
         // Attempt to remove a null product
         try {
@@ -235,6 +274,12 @@ public class Main {
         }
     }
 
+    /**
+     * Tests adding products to the cart with various scenarios.
+     * It checks for null products, invalid quantities, and valid additions.
+     *
+     * @param aliceCart the cart to perform addition operations on
+     */
     private static void addToCartTest(Cart aliceCart) {
         // Add null product
         try {
@@ -283,6 +328,11 @@ public class Main {
         }
     }
 
+    /**
+     * Tests the creation of products with various scenarios.
+     * It checks for invalid product names, prices, quantities,
+     * and weights for shippable products.
+     */
     private static void createProductTest() {
         // Invalid product name
         try {
@@ -320,6 +370,10 @@ public class Main {
         }
     }
 
+    /**
+     * Tests the creation of customers with various scenarios.
+     * It checks for invalid names, emails, phone numbers, and balances.
+     */
     static void createCustomerTest() {
         // Invalid name
         try {
