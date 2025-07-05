@@ -82,7 +82,7 @@ public class CheckoutService {
         System.out.printf("%-20s %10.2f%n", "Subtotal", itemsCost);
         System.out.printf("%-20s %10.2f%n", "Shipping", shippingFees);
         System.out.printf("%-20s %10.2f%n", "Amount", totalCost);
-        System.out.println("--------------------------------------");
+        System.out.println("--------------------------------------------");
     }
 
     /**
@@ -100,7 +100,7 @@ public class CheckoutService {
             System.out.printf("%-20s %10.2f%n", quantity + "x " + product.getName(), itemCost);
             product.setQuantity(product.getQuantity() - quantity);
         }
-        System.out.println("--------------------------------------");
+        System.out.println("--------------------------------------------");
     }
 
     /**
@@ -122,7 +122,7 @@ public class CheckoutService {
             System.out.printf("%-20s %10s%n", quantity + "x " + item.getName(), weight + "kg");
         }
         System.out.println("Total package weight: " + totalWeight + "kg");
-        System.out.println("--------------------------------------");
+        System.out.println("--------------------------------------------");
     }
 
     /**
