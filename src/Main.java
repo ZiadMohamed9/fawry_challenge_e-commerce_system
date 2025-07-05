@@ -3,6 +3,7 @@ import entity.Customer;
 import entity.product.ExpirableShippableProduct;
 import entity.product.Product;
 import entity.product.ShippableProduct;
+import exception.*;
 import service.CheckoutService;
 
 import java.time.LocalDate;
@@ -127,7 +128,7 @@ public class Main {
         try {
             System.out.println("Attempting to checkout with an empty cart...");
             CheckoutService.checkout(customer);
-        } catch (IllegalArgumentException e) {
+        } catch (EmptyCartException e) {
             System.out.println("Error: " + e.getMessage());
         }
         printLongLine();
@@ -160,7 +161,7 @@ public class Main {
 
             System.out.println("Checking out...");
             CheckoutService.checkout(customer);
-        } catch (IllegalArgumentException e) {
+        } catch (InsufficientQuantityException e) {
             System.out.println("Error: " + e.getMessage());
         }
         printCart(aliceCart);
@@ -189,7 +190,7 @@ public class Main {
 
             System.out.println("Checking out...");
             CheckoutService.checkout(customer);
-        } catch (IllegalArgumentException e) {
+        } catch (InsufficientQuantityException e) {
             System.out.println("Error: " + e.getMessage());
         }
         printCart(aliceCart);
@@ -211,7 +212,7 @@ public class Main {
 
             System.out.println("Checking out...");
             CheckoutService.checkout(customer);
-        } catch (IllegalArgumentException e) {
+        } catch (ExpiredProductException e) {
             System.out.println("Error: " + e.getMessage());
         }
         printCart(aliceCart);
@@ -238,7 +239,7 @@ public class Main {
 
             System.out.println("Checking out...");
             CheckoutService.checkout(customer);
-        } catch (IllegalArgumentException e) {
+        } catch (InsufficientBalanceException e) {
             System.out.println("Error: " + e.getMessage());
         }
         printCart(aliceCart);
@@ -276,7 +277,7 @@ public class Main {
         try {
             System.out.println("Attempting to update a product not in the cart...");
             cart.updateProductQuantity(product, 2);
-        } catch (IllegalArgumentException e) {
+        } catch (ProductNotFoundException e) {
             System.out.println("Error: " + e.getMessage());
         }
         printCart(cart);
@@ -292,7 +293,7 @@ public class Main {
             // Attempt to update the product quantity to an invalid amount
             System.out.println("Attempting to update the product quantity to an invalid amount...");
             cart.updateProductQuantity(product, 10);
-        } catch (IllegalArgumentException e) {
+        } catch (InsufficientQuantityException e) {
             System.out.println("Error: " + e.getMessage());
         }
         printCart(cart);
@@ -322,7 +323,7 @@ public class Main {
         try {
             System.out.println("Updating the product quantity to a valid amount...");
             cart.updateProductQuantity(product, 2);
-        } catch (IllegalArgumentException e) {
+        } catch (RuntimeException e) {
             System.out.println("Error: " + e.getMessage());
         }
         printCart(cart);
@@ -361,7 +362,7 @@ public class Main {
         try {
             System.out.println("Attempting to remove a product not in the cart...");
             cart.remove(product);
-        } catch (IllegalArgumentException e) {
+        } catch (ProductNotFoundException e) {
             System.out.println("Error: " + e.getMessage());
         }
         printCart(cart);
@@ -377,7 +378,7 @@ public class Main {
             // Remove the product from the cart
             System.out.println("Removing product from the cart...");
             cart.remove(product);
-        } catch (IllegalArgumentException e) {
+        } catch (RuntimeException e) {
             System.out.println("Error: " + e.getMessage());
         }
         printCart(cart);
@@ -435,7 +436,7 @@ public class Main {
         try {
             System.out.println("Adding product with insufficient quantity...");
             cart.add(product, 10);
-        } catch (IllegalArgumentException e) {
+        } catch (InsufficientQuantityException e) {
             System.out.println("Error: " + e.getMessage());
         }
         printCart(cart);
@@ -445,7 +446,7 @@ public class Main {
         try {
             System.out.println("Adding product with valid quantity...");
             cart.add(product, 5);
-        } catch (IllegalArgumentException e) {
+        } catch (RuntimeException e) {
             System.out.println("Error: " + e.getMessage());
         }
         printCart(cart);
@@ -455,7 +456,7 @@ public class Main {
         try {
             System.out.println("Adding product with more than available quantity...");
             cart.add(product, 3);
-        } catch (IllegalArgumentException e) {
+        } catch (InsufficientQuantityException e) {
             System.out.println("Error: " + e.getMessage());
         }
         printCart(cart);

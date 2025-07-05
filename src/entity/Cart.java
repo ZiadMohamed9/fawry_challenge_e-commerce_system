@@ -1,6 +1,8 @@
 package entity;
 
 import entity.product.Product;
+import exception.InsufficientQuantityException;
+import exception.ProductNotFoundException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -28,6 +30,8 @@ public class Cart {
      *
      * @param product  The product to add.
      * @param quantity The quantity of the product to add.
+     * @throws IllegalArgumentException if product is null or quantity is less than or equal to zero.
+     * @throws InsufficientQuantityException if the requested quantity exceeds available stock.
      */
     public void add(Product product, int quantity) {
         if (product == null) {
@@ -39,7 +43,7 @@ public class Cart {
 
         int totalQuantity = products.getOrDefault(product, 0) + quantity;
         if (totalQuantity > product.getQuantity()) {
-            throw new IllegalArgumentException("Insufficient quantity available for product: " + product.getName());
+            throw new InsufficientQuantityException("Insufficient quantity available for product: " + product.getName());
         }
         products.put(product, totalQuantity);
         itemsTotalCost += product.getPrice() * quantity;
@@ -52,13 +56,15 @@ public class Cart {
      * Throws an exception if the product is null or not found in the cart.
      *
      * @param product The product to remove.
+     * @throws IllegalArgumentException if product is null.
+     * @throws ProductNotFoundException if the product is not found in the cart.
      */
     public void remove(Product product) {
         if (product == null) {
             throw new IllegalArgumentException("Product cannot be null.");
         }
         if (!products.containsKey(product)) {
-            throw new IllegalArgumentException("Product not found in cart: " + product.getName());
+            throw new ProductNotFoundException("Product not found in cart: " + product.getName());
         }
 
         int quantity = products.get(product);
@@ -75,6 +81,9 @@ public class Cart {
      *
      * @param product  The product to update.
      * @param quantity The new quantity of the product.
+     * @throws IllegalArgumentException if product is null or quantity is less than or equal to zero.
+     * @throws ProductNotFoundException if the product is not found in the cart.
+     * @throws InsufficientQuantityException if the requested quantity exceeds available stock.
      */
     public void updateProductQuantity(Product product, int quantity) {
         if (product == null) {
@@ -84,10 +93,10 @@ public class Cart {
             throw new IllegalArgumentException("Quantity must be greater than zero.");
         }
         if (!products.containsKey(product)) {
-            throw new IllegalArgumentException("Product not found in cart: " + product.getName());
+            throw new ProductNotFoundException("Product not found in cart: " + product.getName());
         }
         if (quantity > product.getQuantity()) {
-            throw new IllegalArgumentException("Insufficient quantity available for product: " + product.getName());
+            throw new InsufficientQuantityException("Insufficient quantity available for product: " + product.getName());
         }
 
         int currentQuantity = products.get(product);
