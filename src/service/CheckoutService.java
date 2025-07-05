@@ -1,10 +1,14 @@
 package service;
 
-import model.Cart;
-import model.Customer;
-import model.product.Expirable;
-import model.product.Product;
-import model.product.Shippable;
+import entity.Cart;
+import entity.Customer;
+import entity.product.Expirable;
+import entity.product.Product;
+import entity.product.Shippable;
+import exception.EmptyCartException;
+import exception.ExpiredProductException;
+import exception.InsufficientBalanceException;
+import exception.InsufficientQuantityException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -19,8 +23,11 @@ public class CheckoutService {
      * Validates the customer's cart, calculates shipping fees, and processes the payment.
      *
      * @param customer The customer who is checking out.
-     * @throws IllegalArgumentException if the customer is null, the cart is empty,
-     *                                  or if there are insufficient funds.
+     * @throws IllegalArgumentException if the customer is null.
+     * @throws EmptyCartException if the customer's cart is empty.
+     * @throws InsufficientBalanceException if the customer does not have enough balance to cover the total cost.
+     * @throws InsufficientQuantityException if any product in the cart is out of stock or insufficient quantity is available.
+     * @throws ExpiredProductException if any product in the cart is expired.
      */
     public static void checkout(Customer customer) {
         // Validate the customer
@@ -31,7 +38,7 @@ public class CheckoutService {
         // Validate the customer's cart
         Cart cart = customer.getCart();
         if (cart.isEmpty()) {
-            throw new IllegalArgumentException("Cart is empty. Please add items to the cart before checkout.");
+            throw new EmptyCartException("Cart is empty. Please add items to the cart before checkout.");
         }
 
         // Create a map to hold shippable items and their quantities and to ship them later
@@ -47,7 +54,7 @@ public class CheckoutService {
 
         // Check if the customer has enough balance to cover the total cost
         if (totalCost > customer.getBalance()) {
-            throw new IllegalArgumentException("Insufficient balance. Total cost: " + totalCost + ", Available balance: " + customer.getBalance());
+            throw new InsufficientBalanceException("Insufficient balance. Total cost: " + totalCost + ", Available balance: " + customer.getBalance());
         }
 
         // Print the shipping notice with item details and total weight
@@ -113,6 +120,7 @@ public class CheckoutService {
             System.out.println("------------- Shipment Notice -------------");
             System.out.printf("%-20s %10s%n", "Item", "Weight(kg)");
         }
+
         double totalWeight = 0.0;
         for (var entry : shippableItems.entrySet()) {
             Shippable item = entry.getKey();
@@ -130,7 +138,8 @@ public class CheckoutService {
      *
      * @param cart The customer's cart containing products and their quantities.
      * @return A map of shippable items and their quantities.
-     * @throws IllegalArgumentException if a product is out of stock, insufficient stock, or expired.
+     * @throws InsufficientQuantityException if any product is out of stock or insufficient quantity is available.
+     * @throws ExpiredProductException if any product is expired.
      */
     private static Map<Shippable, Integer> validateProductsAndGetShippableItems(Cart cart) {
         Map<Shippable, Integer> shippableItems = new HashMap<>();
@@ -150,18 +159,19 @@ public class CheckoutService {
      *
      * @param product  The product to validate.
      * @param quantity The quantity of the product being purchased.
-     * @throws IllegalArgumentException if the product is out of stock, insufficient stock, or expired.
+     * @throws InsufficientQuantityException if the product is out of stock or insufficient quantity is available.
+     * @throws ExpiredProductException if the product is expired.
      */
     private static void validateProduct(Product product, int quantity) {
         if (product.getQuantity() == 0) {
-            throw new IllegalArgumentException("Product is out of stock: " + product.getName());
+            throw new InsufficientQuantityException("Product is out of stock: " + product.getName());
         }
         if (product.getQuantity() < quantity) {
-            throw new IllegalArgumentException("Insufficient stock for product: " + product.getName());
+            throw new InsufficientQuantityException("Insufficient stock for product: " + product.getName());
         }
         if (product instanceof Expirable expirable) {
             if (expirable.isExpired()) {
-                throw new IllegalArgumentException("Product is expired: " + product.getName());
+                throw new ExpiredProductException("Product is expired: " + product.getName());
             }
         }
     }

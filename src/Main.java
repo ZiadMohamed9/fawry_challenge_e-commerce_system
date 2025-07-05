@@ -1,8 +1,8 @@
-import model.Cart;
-import model.Customer;
-import model.product.ExpirableShippableProduct;
-import model.product.Product;
-import model.product.ShippableProduct;
+import entity.Cart;
+import entity.Customer;
+import entity.product.ExpirableShippableProduct;
+import entity.product.Product;
+import entity.product.ShippableProduct;
 import service.CheckoutService;
 
 import java.time.LocalDate;

@@ -1,4 +1,4 @@
-package model;
+package entity;
 
 /**
  * Represents a customer in the e-commerce system.

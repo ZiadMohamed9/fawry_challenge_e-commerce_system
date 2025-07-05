@@ -1,4 +1,4 @@
-package model.product;
+package entity.product;
 
 /**
  * Represents a product that can be shipped, extending the Product class.

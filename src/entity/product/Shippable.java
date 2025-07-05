@@ -1,4 +1,4 @@
-package model.product;
+package entity.product;
 
 /**
  * Interface representing a shippable product.

@@ -1,6 +1,6 @@
-package model;
+package entity;
 
-import model.product.Product;
+import entity.product.Product;
 
 import java.util.HashMap;
 import java.util.Map;

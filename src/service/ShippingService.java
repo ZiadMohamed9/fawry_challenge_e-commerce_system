@@ -1,6 +1,6 @@
 package service;
 
-import model.product.Shippable;
+import entity.product.Shippable;
 
 import java.util.Map;
 

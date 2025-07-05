@@ -1,4 +1,4 @@
-package model.product;
+package entity.product;
 
 /**
  * Represents a product with a name, price, and quantity.
